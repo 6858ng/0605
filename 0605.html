@@ -1,243 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
 <meta charset="utf-8" />
-<title>魚類介紹 AR</title>
+<title>魚類介紹 AR - 可調整配對</title>
 
 <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 
-a-scene {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
+  a-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 
-/* 隱藏 MindAR 預設 UI */
-.mindar-ui-loading,
-.mindar-ui-error,
-.mindar-ui-scanning {
-  display: none;
-}
+  .mindar-ui-loading,
+  .mindar-ui-error,
+  .mindar-ui-scanning {
+    display: none !important;
+  }
 
-/* 介紹文字框 */
-#info-box {
-  display: none;
+  #info-card {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 560px;
+    background: rgba(10, 20, 25, 0.9);
+    backdrop-filter: blur(10px);
+    color: #fefefe;
+    padding: 18px 22px;
+    border-radius: 28px;
+    font-size: 16px;
+    line-height: 1.5;
+    z-index: 9999;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.25);
+    pointer-events: none;
+  }
 
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  #info-card h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffd966;
+    border-left: 4px solid #ffaa33;
+    padding-left: 12px;
+  }
 
-  width: 85%;
-  max-width: 600px;
+  .info-label {
+    font-weight: 600;
+    background: rgba(255,255,240,0.2);
+    padding: 2px 8px;
+    border-radius: 24px;
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 8px;
+  }
 
-  background: rgba(0,0,0,0.7);
-  color: white;
+  hr {
+    margin: 10px 0;
+    border-color: rgba(255,255,255,0.2);
+  }
 
-  padding: 16px;
-
-  border-radius: 12px;
-
-  font-size: 18px;
-  line-height: 1.6;
-
-  z-index: 9999;
-}
+  @media (max-width: 600px) {
+    #info-card { padding: 14px 18px; bottom: 16px; font-size: 14px; }
+    #info-card h2 { font-size: 20px; }
+  }
 </style>
 </head>
-
 <body>
 
-<!-- 文字介紹區 -->
-<div id="info-box"></div>
+<div id="info-card"></div>
 
-<!-- AR 場景 -->
 <a-scene
-mindar-image="
-  imageTargetSrc: targets.mind;
-  autoStart: true;
-  uiLoading: no;
-  uiScanning: no;
-  uiError: no;
-"
-color-space="sRGB"
-renderer="colorManagement: true, physicallyCorrectLights"
-vr-mode-ui="enabled: false"
-device-orientation-permission-ui="enabled: false"
+  mindar-image="
+    imageTargetSrc: targets.mind;
+    autoStart: true;
+    uiLoading: no;
+    uiScanning: no;
+    uiError: no;
+  "
+  color-space="sRGB"
+  renderer="colorManagement: true, physicallyCorrectLights"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
 >
 
-<!-- 相機 -->
-<a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-<!-- ========================= -->
-<!-- 吳郭魚 -->
-<!-- ========================= -->
-<a-entity mindar-image-target="targetIndex: 0" id="tilapia-target">
+  <!-- ========================================================== -->
+  <!-- 四個追蹤目標，分別對應 targetIndex 0,1,2,3                  -->
+  <!-- 注意：targetIndex 順序 = 您訓練 targets.mind 時的上傳順序    -->
+  <!-- ========================================================== -->
 
-  <a-image
-    src="tilapia.jpg"
-    position="0 0 0"
-    width="1"
-    height="0.7"
+  <!-- index 0 -->
+  <a-entity mindar-image-target="targetIndex: 0" id="target-0">
+    <a-image src="fish0.jpg" position="0 0 0" width="0.9" height="0.6" transparent="true"></a-image>
+  </a-entity>
 
-    animation="
-      property: rotation;
-      to: 0 360 0;
-      loop: true;
-      dur: 8000;
-      easing: linear;
-    "
-  ></a-image>
+  <!-- index 1 -->
+  <a-entity mindar-image-target="targetIndex: 1" id="target-1">
+    <a-image src="fish1.jpg" position="0 0 0" width="0.9" height="0.6" transparent="true"></a-image>
+  </a-entity>
 
-</a-entity>
+  <!-- index 2 -->
+  <a-entity mindar-image-target="targetIndex: 2" id="target-2">
+    <a-image src="fish2.jpg" position="0 0 0" width="0.9" height="0.6" transparent="true"></a-image>
+  </a-entity>
 
-<!-- ========================= -->
-<!-- 鮭魚 -->
-<!-- ========================= -->
-<a-entity mindar-image-target="targetIndex: 1" id="salmon-target">
-
-  <a-image
-    src="salmon.jpg"
-    position="0 0 0"
-    width="1"
-    height="0.7"
-
-    animation="
-      property: rotation;
-      to: 0 360 0;
-      loop: true;
-      dur: 8000;
-      easing: linear;
-    "
-  ></a-image>
-
-</a-entity>
-
-<!-- ========================= -->
-<!-- 鱸魚 -->
-<!-- ========================= -->
-<a-entity mindar-image-target="targetIndex: 2" id="bass-target">
-
-  <a-image
-    src="bass.jpg"
-    position="0 0 0"
-    width="1"
-    height="0.7"
-
-    animation="
-      property: rotation;
-      to: 0 360 0;
-      loop: true;
-      dur: 8000;
-      easing: linear;
-    "
-  ></a-image>
-
-</a-entity>
-
-<!-- ========================= -->
-<!-- 小丑魚 -->
-<!-- ========================= -->
-<a-entity mindar-image-target="targetIndex: 3" id="clownfish-target">
-
-  <a-image
-    src="clownfish.jpg"
-    position="0 0 0"
-    width="1"
-    height="0.7"
-
-    animation="
-      property: rotation;
-      to: 0 360 0;
-      loop: true;
-      dur: 8000;
-      easing: linear;
-    "
-  ></a-image>
-
-</a-entity>
+  <!-- index 3 -->
+  <a-entity mindar-image-target="targetIndex: 3" id="target-3">
+    <a-image src="fish3.jpg" position="0 0 0" width="0.9" height="0.6" transparent="true"></a-image>
+  </a-entity>
 
 </a-scene>
 
 <script>
+  (function() {
+    // ==========================================================
+    // ★★★ 重要：請依照您訓練 targets.mind 時的圖片順序，修改這裡 ★★★
+    // ==========================================================
+    // 順序說明：
+    //   index0 對應您上傳的第1張圖卡
+    //   index1 對應您上傳的第2張圖卡
+    //   index2 對應您上傳的第3張圖卡
+    //   index3 對應您上傳的第4張圖卡
+    //
+    // 請將下方 'fishName' 改成正確的魚種，文字就會自動配對！
+    // ==========================================================
 
-window.addEventListener("load", () => {
+    const indexToFish = {
+       0: {
+        name: "小丑魚",
+        environment: "溫暖的珊瑚礁海域，與海葵共生",
+        food: "藻類、浮游生物",
+        edible: "⚠️ 不建議食用 (觀賞魚)",
+        ecology: "與海葵互利共生，保護珊瑚礁"
+      },
+        1: {
+        name: "",
+        environment: "淡水湖泊、水庫及養殖魚塭",
+        food: "藻類、水生植物、碎屑 (雜食性)",
+        edible: "✅ 可以食用，肉質鮮美",
+        ecology: "成長快速，外來種可能壓縮原生魚種"
+      },
+      2: {
+        name: "鮭魚",
+        environment: "冷水海域，繁殖季溯溪至淡水河流",
+        food: "小魚、磷蝦、甲殼類",
+        edible: "✅ 頂級食用魚，富含Omega-3",
+        ecology: "過度捕撈導致野生族群減少"
+      },
+      3: {
+        name: "鱸魚",
+        environment: "海水沿岸、河口域",
+        food: "小魚、蝦蟹 (肉食性)",
+        edible: "✅ 肉質細嫩，適合清蒸",
+        ecology: "掠食者，調控小型魚類數量"
+      },
+      
+    };
 
-  const infoBox = document.querySelector("#info-box");
+    // 如果您 training 的順序不同，請直接調整上面的內容！
+    // 例如：若第1張圖是小丑魚、第2張是吳郭魚...就把 name 互換位置。
+    // ==========================================================
 
-  // 四種魚介紹資料
-  const fishData = {
+    const infoPanel = document.querySelector("#info-card");
 
-    "tilapia-target": `
-      <h2>吳郭魚</h2>
-      生活環境：淡水、養殖場<br>
-      食物：水草、藻類（雜食）<br>
-      可食用：可以<br>
-      生態影響：大量繁殖可能破壞生態
-    `,
+    function buildInfoHTML(data) {
+      if (!data) return "<div>錯誤：找不到魚類資訊</div>";
+      return `
+        <h2>🐟 ${data.name}</h2>
+        <p><span class="info-label">🌍 生活環境</span> ${data.environment}</p>
+        <p><span class="info-label">🍽️ 食物</span> ${data.food}</p>
+        <p><span class="info-label">🍴 可食用</span> ${data.edible}</p>
+        <p><span class="info-label">🌿 生態影響</span> ${data.ecology}</p>
+        <hr>
+        <div style="font-size:13px; opacity:0.7;">✨ 掃描對應圖卡顯示介紹</div>
+      `;
+    }
 
-    "salmon-target": `
-      <h2>鮭魚</h2>
-      生活環境：淡水與海洋<br>
-      食物：小魚蝦、浮游生物<br>
-      可食用：可以<br>
-      生態影響：過度捕撈可能造成失衡
-    `,
+    // 為每個 targetIndex 綁定事件
+    for (let i = 0; i <= 3; i++) {
+      const entity = document.querySelector(`#target-${i}`);
+      if (!entity) continue;
 
-    "bass-target": `
-      <h2>鱸魚</h2>
-      生活環境：海水沿岸<br>
-      食物：小魚蝦、甲殼類<br>
-      可食用：可以<br>
-      生態影響：控制小型魚類數量
-    `,
+      const fishData = indexToFish[i];
 
-    "clownfish-target": `
-      <h2>小丑魚</h2>
-      生活環境：珊瑚礁<br>
-      食物：藻類、浮游生物<br>
-      可食用：不建議<br>
-      生態影響：與海葵共生，維持珊瑚礁平衡
-    `
-  };
+      const onFound = () => {
+        if (infoPanel && fishData) {
+          infoPanel.innerHTML = buildInfoHTML(fishData);
+          infoPanel.style.display = "block";
+          console.log(`辨識到 index ${i} -> ${fishData.name}`);
+        }
+      };
 
-  // 綁定所有 target
-  Object.keys(fishData).forEach(id => {
+      const onLost = () => {
+        if (infoPanel) {
+          infoPanel.style.display = "none";
+        }
+      };
 
-    const target = document.querySelector(`#${id}`);
+      entity.addEventListener("targetFound", onFound);
+      entity.addEventListener("targetLost", onLost);
+    }
 
-    // 掃描到
-    target.addEventListener("targetFound", () => {
-
-      infoBox.innerHTML = fishData[id];
-      infoBox.style.display = "block";
-
-    });
-
-    // 消失
-    target.addEventListener("targetLost", () => {
-
-      infoBox.style.display = "none";
-
-    });
-
-  });
-
-});
-
+    console.log("✅ 已設定完成。如果文字配對錯誤，請修改 indexToFish 的順序！");
+  })();
 </script>
+
+<style>
+  a-image { animation: none !important; }
+  [animation] { animation: none !important; }
+</style>
 
 </body>
 </html>
